@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  {# ========== HERO ========== #}
+  <section class="hero" id="accueil">
+    <div class="hero-bg">
+      <img src="{{ url_for('static', filename='img/hero_background.jpg') }}"
+           alt="Raffinerie pétrolière Sahara Oil Trading" class="hero-bg-img" />
+      <div class="hero-overlay"></div>
+      <div class="hero-particles" id="heroParticles"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        {{ hero.badge }}
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-title-sub">{{ hero.title_sub }}</span>
+        <span class="hero-title-main">{{ hero.title_main }}</span>
+        <span class="hero-title-accent">{{ hero.title_accent }}</span>
+      </h1>
+      <p class="hero-description">{{ hero.description }}</p>
+      <div class="hero-actions">
+        <a href="#services" class="btn btn-primary" id="hero-services-btn">
+          <span>Nos Services</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-outline" id="hero-contact-btn">
+          <span>Nous Contacter</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        {% for stat in hero.stats %}
+        {% if not loop.first %}<div class="hero-stat-divider"></div>{% endif %}
+        <div class="hero-stat">
+          <span class="hero-stat-number">{{ stat.number }}</span>
+          <span class="hero-stat-label">{{ stat.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <div class="scroll-mouse">
+        <div class="scroll-wheel"></div>
+      </div>
+      <span>Défiler</span>
+    </div>
+  </section>
+
+  {# ========== TICKER ========== #}
+  <div class="ticker-wrapper">
+    <div class="ticker-label">ACTUALITÉS</div>
+    <div class="ticker-track">
+      <div class="ticker-content">
+        {# La liste est dupliquée pour un défilement continu sans coupure. #}
+        {% for _ in range(2) %}
+          {% for item in ticker_items %}<span>{{ item }}</span>{% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {# ========== À PROPOS ========== #}
+  <section class="section about" id="apropos">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-img-wrapper">
+            <img src="{{ url_for('static', filename='img/pipeline_export.jpg') }}"
+                 alt="Infrastructure pétrolière SAHARA OIL" class="about-img" />
+            <div class="about-img-accent"></div>
+          </div>
+          <div class="about-card-floating" id="about-floating-card">
+            <div class="floating-card-icon">{{ about.floating_card.icon }}</div>
+            <div>
+              <div class="floating-card-title">{{ about.floating_card.title }}</div>
+              <div class="floating-card-sub">{{ about.floating_card.subtitle }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-content">
+          <div class="section-badge">{{ about.badge }}</div>
+          <h2 class="section-title">
+            {{ about.title }} <span class="text-accent">{{ about.title_accent }}</span>
+          </h2>
+          <p class="about-lead">{{ about.lead | safe }}</p>
+          {% for paragraph in about.paragraphs %}
+          <p class="about-text">{{ paragraph }}</p>
+          {% endfor %}
+          <div class="about-features">
+            {% for feature in about.features %}
+            <div class="about-feature">
+              <div class="feature-icon">{{ feature.icon }}</div>
+              <div>
+                <strong>{{ feature.title }}</strong>
+                <p>{{ feature.text }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <a href="#contact" class="btn btn-primary" id="about-contact-btn">Partenariat &amp; Collaboration</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ========== SERVICES ========== #}
+  <section class="section services" id="services">
+    <div class="services-bg-overlay"></div>
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Ce que nous faisons</div>
+        <h2 class="section-title">Nos <span class="text-accent">Services Principaux</span></h2>
+        <p class="section-subtitle">
+          De la source à la destination, nous couvrons l'intégralité de la chaîne
+          d'approvisionnement en produits pétroliers.
+        </p>
+      </div>
+      <div class="services-grid">
+        {% for service in services %}
+        <div class="service-card{% if service.featured %} featured{% endif %}" id="{{ service.id }}">
+          <div class="service-card-bg">
+            <img src="{{ url_for('static', filename='img/' ~ service.image) }}" alt="{{ service.image_alt }}" />
+          </div>
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            {% if service.featured %}
+            <div class="service-badge-featured">{{ service.featured_label }}</div>
+            {% endif %}
+            <div class="service-icon">{{ service.icon_svg | safe }}</div>
+            <h3 class="service-title">{{ service.title }}</h3>
+            <p class="service-desc">{{ service.description }}</p>
+            <ul class="service-list">
+              {% for item in service["items"] %}<li>{{ item }}</li>{% endfor %}
+            </ul>
+            <a href="#contact" class="service-link" id="{{ service.link_id }}">En savoir plus →</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# ========== PRODUITS ========== #}
+  <section class="section products" id="produits">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Notre Gamme</div>
+        <h2 class="section-title">Produits <span class="text-accent">Pétroliers</span></h2>
+        <p class="section-subtitle">
+          Une gamme complète de produits pétroliers pour tous vos besoins industriels,
+          commerciaux et de transport.
+        </p>
+      </div>
+      <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card" id="{{ product.id }}">
+          <div class="product-icon-wrap">
+            <div class="product-icon">{{ product.icon }}</div>
+          </div>
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-desc">{{ product.description }}</p>
+          <div class="product-specs">
+            {% for spec in product.specs %}<span class="spec-tag">{{ spec }}</span>{% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# ========== CHIFFRES CLÉS ========== #}
+  <section class="section stats-section" id="chiffres">
+    <div class="stats-bg">
+      <img src="{{ url_for('static', filename='img/hero_background.jpg') }}" alt="Background" />
+      <div class="stats-overlay"></div>
+    </div>
+    <div class="container">
+      <div class="section-header light">
+        <div class="section-badge light">Notre Impact</div>
+        <h2 class="section-title light">Chiffres <span class="text-accent">Clés</span></h2>
+        <p class="section-subtitle light">
+          Des résultats qui témoignent de notre engagement et de notre expertise
+          dans le secteur énergétique.
+        </p>
+      </div>
+      <div class="stats-grid">
+        {% for stat in stats %}
+        <div class="stat-card" id="{{ stat.id }}">
+          <div class="stat-icon">{{ stat.icon }}</div>
+          <div class="stat-number" data-target="{{ stat.target }}" data-suffix="{{ stat.suffix }}">0{{ stat.suffix }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+          <div class="stat-desc">{{ stat.description }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# ========== POLITIQUE QHSE-E ========== #}
+  <section class="section qhse" id="qhse">
+    <div class="qhse-bg-deco"></div>
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Engagement Officiel</div>
+        <h2 class="section-title">Politique <span class="text-accent">QHSE-E</span></h2>
+        <p class="section-subtitle">
+          Qualité · Hygiène · Sécurité · Environnement · Éthique des Affaires
+        </p>
+      </div>
+
+      <div class="qhse-intro">
+        <div class="qhse-logo-stamp">
+          <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="SAHARA OIL TRADING Logo" />
+        </div>
+        <div class="qhse-intro-text">
+          <h3>{{ qhse_intro.heading }}</h3>
+          <p>{{ qhse_intro.text }}</p>
+          <div class="qhse-intro-badge">
+            {% for badge in qhse_intro.badges %}<span>{{ badge }}</span>{% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="qhse-grid">
+        {% for pillar in qhse_pillars %}
+        <div class="qhse-card{% if pillar.featured %} featured{% endif %}" id="{{ pillar.id }}">
+          <div class="qhse-card-number">{{ '%02d' % loop.index }}</div>
+          <div class="qhse-card-header">
+            <div class="qhse-icon">{{ pillar.icon }}</div>
+            <h3 class="qhse-title">{{ pillar.title }}</h3>
+          </div>
+          <p class="qhse-desc">{{ pillar.description }}</p>
+          <div class="qhse-standard">
+            {% for tag in pillar.tags %}<span class="std-tag">{{ tag }}</span>{% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="qhse-cta">
+        <div class="qhse-cta-inner">
+          <div>
+            <h3>{{ qhse_cta.title }}</h3>
+            <p>{{ qhse_cta.text }}</p>
+          </div>
+          <a href="#contact" class="btn btn-primary" id="qhse-contact-btn">
+            <span>{{ qhse_cta.button }}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ========== POURQUOI NOUS ========== #}
+  <section class="section why-us">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Notre Avantage</div>
+        <h2 class="section-title">Pourquoi Choisir <span class="text-accent">{{ site.name }}</span> ?</h2>
+      </div>
+      <div class="why-grid">
+        {% for card in why_cards %}
+        <div class="why-card" id="{{ card.id }}">
+          <div class="why-icon">{{ card.icon }}</div>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.description }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# ========== CONTACT ========== #}
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Prenons Contact</div>
+        <h2 class="section-title">Contactez <span class="text-accent">Notre Équipe</span></h2>
+        <p class="section-subtitle">
+          Notre équipe commerciale est disponible pour répondre à vos questions
+          et élaborer des offres personnalisées.
+        </p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3 class="contact-info-title">Informations de Contact</h3>
+          <div class="contact-details">
+            {% for item in contact_items %}
+            <div class="contact-item" id="{{ item.id }}">
+              <div class="contact-item-icon">{{ item.icon }}</div>
+              <div>
+                <strong>{{ item.title }}</strong>
+                <p>{{ item.lines | join('<br/>') | safe }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="contact-markets">
+            <h4>Marchés Desservis</h4>
+            <div class="markets-list">
+              {% for market in markets %}<span class="market-tag">{{ market }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrapper">
+          <form class="contact-form" id="contactForm"
+                action="{{ url_for('api_contact') }}" method="post" novalidate>
+            <h3 class="form-title">Envoyez-nous un Message</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">Prénom *</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Votre prénom" required />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Nom *</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Votre nom" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="company">Entreprise</label>
+              <input type="text" id="company" name="company" placeholder="Nom de votre entreprise" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" placeholder="votre@email.com" required />
+              </div>
+              <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" placeholder="+237 000 000 000" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="service">Type de Service</label>
+              <select id="service" name="service">
+                <option value="">Sélectionnez un service</option>
+                {% for value, label in service_choices.items() %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre besoin..." rows="5" required></textarea>
+            </div>
+
+            {# Piège à robots : invisible pour les humains, vérifié côté serveur. #}
+            <div class="form-group" aria-hidden="true"
+                 style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+              <label for="website">Ne pas remplir</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="submitContactBtn">
+              <span>Envoyer le Message</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+            <div class="form-success" id="formSuccess">
+              <div class="success-icon">✅</div>
+              <p>Votre message a été envoyé avec succès ! Notre équipe vous contactera sous 24h.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

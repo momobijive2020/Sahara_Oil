@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{{ site.title }}{% endblock %}</title>
+  <meta name="description" content="{{ site.description }}" />
+  <meta name="keywords" content="{{ site.keywords }}" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="{{ site.name }} {{ site.legal_form }}" />
+  <meta property="og:description" content="{{ site.og_description }}" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="{{ url_for('static', filename='img/logo.jpg') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  {# ========== PRELOADER ========== #}
+  <div id="preloader" class="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo">
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo Sahara Oil Trading" />
+      </div>
+      <div class="preloader-bar">
+        <div class="preloader-fill"></div>
+      </div>
+      <p class="preloader-text">Chargement en cours...</p>
+    </div>
+  </div>
+
+  {# ========== NAVIGATION ========== #}
+  <header class="header" id="header">
+    <nav class="navbar">
+      <div class="nav-brand">
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Sahara Oil Trading Logo" class="nav-logo" />
+        <div class="nav-brand-text">
+          <span class="brand-name">{{ site.name }}</span>
+          <span class="brand-tagline">{{ site.tagline }}</span>
+        </div>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        {% for link in nav_links %}
+        <li>
+          <a href="#{{ link.id }}"
+             class="nav-link{% if loop.first %} active{% endif %}"
+             id="link-{{ link.id }}">{{ link.label }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      <a href="#contact" class="nav-cta" id="nav-cta-btn">Demander un Devis</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  {# ========== FOOTER ========== #}
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo-wrap">
+              <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Sahara Oil Trading Logo" class="footer-logo" />
+              <div>
+                <div class="footer-brand-name">{{ site.name }}</div>
+                <div class="footer-brand-sub">{{ site.tagline }}</div>
+              </div>
+            </div>
+            <p class="footer-desc">{{ footer.description }}</p>
+            <div class="footer-social">
+              {% for social in social_links %}
+              <a href="{{ social.url }}" class="social-link" id="{{ social.id }}" aria-label="{{ social.label }}">
+                {{ social.svg | safe }}
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+
+          {% for column in footer.columns %}
+          <div class="footer-nav">
+            <h4 class="footer-nav-title">{{ column.title }}</h4>
+            <ul>
+              {% for link in column.links %}
+              <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+
+          <div class="footer-nav">
+            <h4 class="footer-nav-title">Contact Rapide</h4>
+            <ul class="footer-contact-list">
+              {% for item in footer.quick_contact %}
+              <li><span>{{ item.icon }}</span> {{ item.text }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="footer-bottom-content">
+          <p>© {{ site.copyright_year }} {{ site.name }} {{ site.legal_form }} — Tous droits réservés.</p>
+          <div class="footer-legal">
+            {% for label in footer.legal %}
+            <a href="#">{{ label }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  {# ========== BACK TO TOP ========== #}
+  <button class="back-to-top" id="backToTop" aria-label="Retour en haut">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
