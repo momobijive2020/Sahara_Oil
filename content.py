@@ -37,12 +37,12 @@ SITE = {
 }
 
 CONTACT = {
-    "city": "Yaoundé, Cameroun",
-    "region": "Afrique Centrale",
-    "phone": "+237 000 000 000",
+    "city": "556 Rue Koumassi-Bali, Douala",
+    "region": "B.P. 4736 Douala, Cameroun",
+    "phone": "(+237) 672 77 99 50 / 622 12 79 57",
     "hours": "Lun–Ven: 08h00 – 18h00",
-    "email": "contact@saharaoiltrading.cm",
-    "email_secondary": "info@saharaoiltrading.cm",
+    "email": "saharaoil.trading@saharaoiltrading.org",
+    "email_secondary": "saharaoil.trading@saharaoiltrading.org",
     "port": "Port de Douala, Cameroun",
     "port_detail": "Terminal Pétrolier",
 }
@@ -85,10 +85,10 @@ HERO = {
 TICKER_ITEMS = [
     "🛢️ Distribution de carburant au Cameroun",
     "⚡ Approvisionnement fiable en produits pétroliers",
-    "🌍 Exportation vers l'Afrique Centrale et de l'Ouest",
+    "🌍 Exportation vers l'Afrique Centrale",
     "🚢 Importation internationale de pétrole brut",
     "🏆 Certification ISO & conformité internationale",
-    "📊 Marchés: Yaoundé · Douala · Libreville · N'Djamena · Bangui",
+    "📊 Marchés: Douala · Yaoundé · N'Djamena · Bangui",
 ]
 
 # ---------------------------------------------------------------------------
@@ -175,15 +175,16 @@ SERVICES = [
         "icon_svg": _SVG_DISTRIBUTION,
         "title": "Distribution Locale",
         "description": (
-            "Approvisionnement fiable en carburant, lubrifiants et produits "
-            "dérivés sur l'ensemble du territoire camerounais. Réseau de "
-            "distribution dense avec flotte logistique moderne."
+            "Nos domaines d'expertise : carburants pour tous les moteurs — "
+            "Essence et Diesel de haute qualité —, lubrifiants performants pour "
+            "vos équipements, bitume pour vos chantiers et GPL pour vos besoins "
+            "quotidiens. Découvrez nos solutions sur mesure."
         ),
         "items": [
-            "Gasoil & Essence",
-            "Lubrifiants industriels",
-            "Bitume & Asphalte",
-            "GPL (Gaz de pétrole liquéfié)",
+            "Carburants : Essence & Diesel",
+            "Solutions industrielles : lubrifiants",
+            "Infrastructures & Bâtiment : bitume",
+            "Énergie domestique : GPL",
         ],
     },
     {
@@ -196,10 +197,9 @@ SERVICES = [
         "icon_svg": _SVG_IMPORT,
         "title": "Importation",
         "description": (
-            "Sourcing et importation de pétrole brut et produits raffinés "
-            "depuis les marchés internationaux. Conformité douanière assurée "
-            "et délais optimisés grâce à notre réseau de partenaires "
-            "stratégiques."
+            "Importation internationale de pointe. Des délais maîtrisés "
+            "grâce à un écosystème de partenaires stratégiques, du local à "
+            "l'international, pour une réactivité sans faille."
         ),
         "items": [
             "Pétrole brut (Crude Oil)",
@@ -217,12 +217,12 @@ SERVICES = [
         "icon_svg": _SVG_EXPORT,
         "title": "Exportation",
         "description": (
-            "Exportation vers les pays d'Afrique Centrale et de l'Ouest. "
-            "Solutions logistiques complètes incluant transport maritime, "
-            "ferroviaire et routier. Documentation internationale maîtrisée."
+            "Une porte ouverte vers l'Afrique Centrale. Expertise douanière "
+            "et maîtrise des documents d'export (nationaux & internationaux) "
+            "pour des opérations fluides et sécurisées."
         ),
         "items": [
-            "Afrique Centrale & Ouest",
+            "Afrique Centrale",
             "Transport multimodal",
             "Documentation internationale",
             "Assurance & traçabilité",
@@ -571,7 +571,7 @@ CONTACT_ITEMS = [
         "id": "contact-email",
         "icon": "📧",
         "title": "Email",
-        "lines": [CONTACT["email"], CONTACT["email_secondary"]],
+        "lines": [CONTACT["email"]],
     },
     {
         "id": "contact-ports",
@@ -583,11 +583,8 @@ CONTACT_ITEMS = [
 
 MARKETS = [
     "🇨🇲 Cameroun",
-    "🇬🇦 Gabon",
-    "🇨🇬 Congo",
     "🇨🇫 RCA",
     "🇹🇩 Tchad",
-    "🇬🇶 Guinée Éq.",
 ]
 
 # Valeurs autorisées pour le champ "service" du formulaire.
