@@ -27,10 +27,12 @@ d'environnement (voir §2).
 |---|---|
 | `SECRET_KEY` | clé secrète Flask (chaîne aléatoire longue) |
 | `ADMIN_TOKEN` | jeton pour consulter `/admin/messages` |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | envoi des notifications |
-| `MAIL_FROM` | `no-reply@saharaoiltrading.org` |
-| `MAIL_TO` | `saharaoil.trading@saharaoiltrading.org` |
+| `SMTP_PASSWORD` | **seule variable mail obligatoire** : mot de passe de la boîte IONOS `saharaoil.trading@saharaoiltrading.org` |
 | `FLASK_DEBUG` | `0` en production |
+
+Messagerie IONOS pré-configurée dans `app.py` (`smtp.ionos.fr`, port 587, TLS,
+expéditeur et destinataire `saharaoil.trading@saharaoiltrading.org`) — voir `.env.example`.
+Ajoutez le SPF IONOS au DNS : `v=spf1 include:_spf.perfora.net include:_spf.kundenserver.de ~all`, et activez DKIM.
 
 ## 3. Déploiement (option A — Render / Railway, le plus simple)
 

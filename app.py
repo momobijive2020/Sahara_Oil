@@ -52,12 +52,14 @@ class Config:
     ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN")
 
     # Notification email — désactivée tant que SMTP_HOST n'est pas défini.
-    SMTP_HOST = os.environ.get("SMTP_HOST")
+    # Messagerie IONOS de SAHARA OIL TRADING pré-configurée.
+    # Seul SMTP_PASSWORD doit être fourni par variable d'environnement.
+    SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.ionos.fr")
     SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
-    SMTP_USER = os.environ.get("SMTP_USER")
+    SMTP_USER = os.environ.get("SMTP_USER", "saharaoil.trading@saharaoiltrading.org")
     SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
     SMTP_USE_TLS = os.environ.get("SMTP_USE_TLS", "1") == "1"
-    MAIL_FROM = os.environ.get("MAIL_FROM", "no-reply@saharaoiltrading.cm")
+    MAIL_FROM = os.environ.get("MAIL_FROM", "saharaoil.trading@saharaoiltrading.org")
     MAIL_TO = os.environ.get("MAIL_TO", content.CONTACT["email"])
 
 
@@ -72,15 +74,20 @@ def send_notification(app: Flask, data: dict[str, str], message_id: int) -> None
     Une erreur d'envoi n'invalide jamais l'enregistrement du message :
     elle est journalisée puis ignorée.
     """
-    if not app.config["SMTP_HOST"]:
-        logger.info("SMTP non configuré — notification email ignorée (message #%s).", message_id)
+    if not app.config["SMTP_HOST"] or not app.config["SMTP_PASSWORD"]:
+        logger.info(
+            "SMTP_PASSWORD absent — notification email ignorée (message #%s). "
+            "Le message reste enregistré en base.",
+            message_id,
+        )
         return
 
     service = content.SERVICE_CHOICES.get(data.get("service", ""), "Non précisé")
     mail = EmailMessage()
     mail["Subject"] = f"[Site web] Nouveau message #{message_id} — {data['last_name']}"
     mail["From"] = app.config["MAIL_FROM"]
-    mail["To"] = app.config["MAIL_TO"]
+    recipients = [r.strip() for r in str(app.config["MAIL_TO"]).replace(";", ",").split(",") if r.strip()]
+    mail["To"] = ", ".join(recipients)
     mail["Reply-To"] = data["email"]
     mail.set_content(
         f"Nouveau message reçu via le site web\n"
@@ -155,13 +162,21 @@ def create_app(config_object: type[Config] = Config) -> Flask:
         if errors:
             return jsonify({"ok": False, "errors": errors}), 400
 
-        message_id = db.save_message(
-            data,
-            ip=request.headers.get("X-Forwarded-For", request.remote_addr),
-            user_agent=request.headers.get("User-Agent"),
-        )
-        logger.info("Message #%s enregistré (%s).", message_id, data["email"])
-        send_notification(app, data, message_id)
+        message_id = 0
+        try:
+            message_id = db.save_message(
+                data,
+                ip=request.headers.get("X-Forwarded-For", request.remote_addr),
+                user_agent=request.headers.get("User-Agent"),
+            )
+            logger.info("Message #%s enregistré (%s).", message_id, data["email"])
+        except Exception:  # noqa: BLE001 — base indisponible : on notifie quand même
+            logger.exception("Enregistrement en base impossible — envoi de l'email malgré tout.")
+
+        try:
+            send_notification(app, data, message_id)
+        except Exception:  # noqa: BLE001
+            logger.exception("Notification email impossible (message #%s).", message_id)
 
         return jsonify({
             "ok": True,
@@ -194,6 +209,17 @@ def create_app(config_object: type[Config] = Config) -> Flask:
         if request.path.startswith(("/api/", "/admin/")):
             return jsonify({"ok": False, "error": "Ressource introuvable."}), 404
         return render_template("404.html"), 404
+
+    @app.errorhandler(Exception)
+    def unhandled_error(error):
+        from werkzeug.exceptions import HTTPException
+
+        if isinstance(error, HTTPException):
+            return error
+        logger.exception("Exception non gérée : %s", error)
+        if request.path.startswith(("/api/", "/admin/")):
+            return jsonify({"ok": False, "error": "Erreur interne du serveur."}), 500
+        return jsonify({"ok": False, "error": "Erreur interne du serveur."}), 500
 
     @app.errorhandler(500)
     def server_error(error):

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -32,8 +33,17 @@ def get_db() -> sqlite3.Connection:
     """Retourne la connexion SQLite liée au contexte de requête courant."""
     if "db" not in g:
         path = Path(current_app.config["DATABASE"])
-        path.parent.mkdir(parents=True, exist_ok=True)
-        g.db = sqlite3.connect(str(path), detect_types=sqlite3.PARSE_DECLTYPES)
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            g.db = sqlite3.connect(str(path), detect_types=sqlite3.PARSE_DECLTYPES)
+        except (OSError, sqlite3.OperationalError):
+            # Système de fichiers en lecture seule (certains hébergeurs) :
+            # on bascule sur un emplacement temporaire accessible en écriture.
+            fallback = Path(tempfile.gettempdir()) / "sahara.sqlite"
+            current_app.logger.warning(
+                "Base non accessible à %s — repli sur %s", path, fallback
+            )
+            g.db = sqlite3.connect(str(fallback), detect_types=sqlite3.PARSE_DECLTYPES)
         g.db.row_factory = sqlite3.Row
         g.db.execute("PRAGMA foreign_keys = ON")
     return g.db
