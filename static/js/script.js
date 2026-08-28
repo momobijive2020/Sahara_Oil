@@ -403,7 +403,7 @@
     });
   });
 
-  console.log('%c🛢️ SAHARA OIL TRADING S.A.', 'color: #e88e1e; font-size: 1.2rem; font-weight: 800;');
+  console.log('%c🛢️ SAHARA OIL TRADING S.A.', 'color: #D21619; font-size: 1.2rem; font-weight: 800;');
   console.log('%cSite web développé avec excellence.', 'color: #888; font-size: 0.9rem;');
 
 })();
