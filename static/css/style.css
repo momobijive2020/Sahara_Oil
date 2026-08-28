@@ -2070,3 +2070,79 @@ body { background: #ffffff; color: var(--color-text); }
 
 .footer .footer-links a, .footer .footer-desc { color: #111111; }
 .footer .footer-bottom, .footer .footer-legal { border-top-color: rgba(0,0,0,0.10); }
+
+
+/* ============================================
+   ADAPTATION MOBILE / TABLETTE / IPHONE
+   ============================================ */
+html { -webkit-text-size-adjust: 100%; }
+img, svg, video, canvas { max-width: 100%; height: auto; }
+body { overflow-x: hidden; }
+.container { width: 100%; padding-inline: clamp(16px, 5vw, 32px); }
+
+/* Affiche de l'annonce : plus de hauteur fixe sous 1100px */
+@media (max-width: 1100px) {
+  .hero-annonce img { height: auto !important; object-fit: contain !important; }
+  .hero-annonce { margin-inline: auto; }
+}
+
+/* Tablettes */
+@media (max-width: 1024px) {
+  .hero { padding-top: 96px; padding-bottom: 72px; min-height: auto; }
+  .hero-title { font-size: clamp(2rem, 6vw, 3rem); }
+  .hero-subtitle { font-size: 1.02rem; }
+  .hero-stats { flex-wrap: wrap; gap: 24px; }
+  .section { padding: 72px 0; }
+  .section-title { font-size: clamp(1.7rem, 4.6vw, 2.4rem); }
+  .footer-grid { gap: 40px; }
+}
+
+/* Téléphones (iPhone inclus) */
+@media (max-width: 768px) {
+  .hero-layout { gap: 32px; }
+  .hero-buttons { flex-direction: column; align-items: stretch; }
+  .hero-buttons .btn { width: 100%; justify-content: center; }
+  .hero-stats { justify-content: space-between; }
+  .products-grid, .services-grid, .why-grid, .qhse-grid, .footer-grid, .contact-grid, .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .stats-grid { gap: 28px; }
+  .contact-form-wrapper, .contact-item { padding: 22px; }
+  .form-row { grid-template-columns: 1fr !important; }
+  /* cibles tactiles */
+  .btn, .nav-cta, .social-link, .nav-toggle, .lang-toggle,
+  .form-group input, .form-group select, .form-group textarea, button[type="submit"] {
+    min-height: 44px;
+  }
+  .form-group input, .form-group select, .form-group textarea { font-size: 16px; } /* évite le zoom iOS */
+  .nav-toggle, .social-link { min-width: 44px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .section { padding: 56px 0; }
+  .hero { padding-top: 88px; }
+  .hero-title { font-size: clamp(1.75rem, 8vw, 2.3rem); }
+  .section-title { font-size: 1.55rem; }
+  .hero-stats { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .hero-annonce .marquee-text, .hero-annonce span { font-size: .82rem !important; }
+  .market-tags { gap: 8px; }
+}
+
+/* Encoches iPhone (safe areas) */
+@supports (padding: max(0px)) {
+  .header, .container, .footer {
+    padding-left: max(env(safe-area-inset-left), 16px);
+    padding-right: max(env(safe-area-inset-right), 16px);
+  }
+}
+
+/* Paysage bas de plafond (téléphone à l'horizontale) */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero { min-height: auto; padding-top: 84px; padding-bottom: 56px; }
+}
+
+/* Écrans tactiles : pas d'effets de survol collants */
+@media (hover: none) {
+  .product-card:hover, .service-card:hover, .why-card:hover { transform: none; }
+}
